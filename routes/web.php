@@ -1,5 +1,8 @@
 <?php
+require_once('../constant/Constant.php');
 
+use App\Http\Controllers\Admin\LoginController;
+use App\Http\Controllers\Admin\RegisterController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\BrandController;
@@ -11,7 +14,6 @@ use App\Http\Controllers\Admin\ProductDetailController;
 use App\Http\Controllers\Admin\SliderController;
 
 use  App\Http\Controllers\Consumer\ConsumerController;
-use App\Models\Slider;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -29,11 +31,15 @@ use Illuminate\Support\Facades\Route;
 //     return view('welcome');
 // });
 
-Route::get('admin',[AdminController::class, 'index'])->name('admin');
-Route::post('admin/auth',[AdminController::class, 'auth'])->name('admin.auth');
+Route::get(ADMIN_LOGIN_URL, [LoginController::class, 'index'])
+    ->name(ADMIN_LOGIN_ROUTE);
+Route::post(ADMIN_LOGIN_AUTH_URL,[LoginController::class, 'login_handler'])
+    ->name(ADMIN_LOGIN_AUTH_ROUTE);
 
-Route::get('admin/register',[AdminController::class, 'register'])->name('admin.register');
-Route::post('admin/registerhandle',[AdminController::class, 'register_handle'])->name('admin.register_handle');
+Route::get(ADMIN_REGISTER_URL, [RegisterController::class, 'index'])
+    ->name(ADMIN_REGISTER_ROUTE);
+Route::post(ADMIN_REGISTER_AUTH_URL, [RegisterController::class, 'register_handler'])
+    ->name(ADMIN_REGISTER_AUTH_ROUTE);
 
 Route::group(['middleware'=>'admin_auth'], function(){
 
@@ -62,14 +68,14 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::get('admin/coupon/delete_coupon/{coupon_id}', [CouponController::class, 'delete_coupon'])->name('admin.coupon.delete_coupon');
     Route::get('admin/coupon/update_coupon/{coupon_id}', [CouponController::class, 'update_coupon'])->name('admin.coupon.update_coupon');
     Route::post('admin/coupon/update_coupon_handle', [CouponController::class, 'update_coupon_handle'])->name('admin.coupon.update_coupon_handle');
-    
+
     Route::get('admin/product', [ProductController::class, 'index'])->name('admin.product');
     Route::get('admin/product/add_product', [ProductController::class, 'add_product'])->name('admin.product.add_product');
     Route::post('admin/product/add_product_handle', [ProductController::class, 'add_product_handle'])->name('admin.product.add_product_handle');
     Route::get('admin/product/delete_product/{product_id}', [ProductController::class, 'delete_product'])->name('admin.product.delete_product');
     Route::get('admin/product/update_product/{product_id}', [ProductController::class, 'update_product'])->name('admin.product.update_product');
     Route::post('admin/product/update_product_handle', [ProductController::class, 'update_product_handle'])->name('admin.product.update_product_handle');
-    
+
     Route::get('admin/product_detail/{product_id}', [ProductDetailController::class, 'index'])->name('admin.product_detail');
     Route::get('admin/product_detail/add_product_detail/{product_id}', [ProductDetailController::class, 'add_product_detail'])->name('admin.product_detail.add_product_detail');
     Route::post('admin/product_detail/add_product_detail_handle', [ProductDetailController::class, 'add_product_detail_handle'])->name('admin.product_detail.add_product_detail_handle');
@@ -83,12 +89,12 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::get('admin/product_detail/add_product_images/{product_id}', [ProductDetailController::class, 'add_product_images'])->name('admin.product_detail.add_product_images');
     Route::post('admin/product_detail/add_product_images_handle', [ProductDetailController::class, 'add_product_images_handle'])->name('admin.product_detail.add_product_images_handle');
     Route::get('admin/product_detail/delete_product_image/{product_image_id}', [ProductDetailController::class, 'delete_product_image'])->name('admin.product_detail.delete_product_image');
-    
+
     Route::get('admin/customer', [CustomerController::class, 'index'])->name('admin.customer');
     Route::get('admin/customer/delete_customer/{customer_id}', [CustomerController::class, 'delete_customer'])->name('admin.customer.delete_customer');
     Route::get('admin/customer/change_status/{customer_id}', [CustomerController::class, 'change_status'])->name('admin.customer.change_status');
     Route::get('admin/customer/customer_detail/{customer_id}', [CustomerController::class, 'customer_detail'])->name('admin.customer.customer_detail');
-    
+
     Route::get('admin/order', [OrderController::class, 'index'])->name('admin.order');
     Route::get('admin/order/update_order_status/{order_id}/{status}', [OrderController::class, 'update_order_status'])->name('admin.order.update_order_status');
     Route::post('admin/order/delete_order/{order_id}', [OrderController::class, 'delete_order'])->name('admin.order.delete_order');
@@ -100,7 +106,7 @@ Route::group(['middleware'=>'admin_auth'], function(){
     Route::get('admin/slider/delete_slider/{slider_id}', [SliderController::class, 'delete_slider'])->name('admin.slider.delete_slider');
     Route::get('admin/slider/update_slider/{slider_id}', [SliderController::class, 'update_slider'])->name('admin.slider.update_slider');
     Route::post('admin/slider/update_slider_handle', [SliderController::class, 'update_slider_handle'])->name('admin.slider.update_slider_handle');
-    
+
 });
 
 

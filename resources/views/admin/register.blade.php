@@ -2,9 +2,7 @@
 <html lang="en">
 
 <head>
-
     @include('admin.partials.head')
-
 </head>
 
 <body class="animsition">
@@ -14,13 +12,12 @@
                 <div class="login-wrap">
                     <div class="login-content">
                         <div class="login-logo">
-                            
                             <a href="#">
                                 Register for New Account
                             </a>
                         </div>
                         <div class="login-form">
-                            <form action="{{ route('admin.register_handle') }}" method="post">
+                            <form action="{{ route(Config::get('constants.ADMIN_REGISTER_AUTH_ROUTE')) }}" method="post">
                                 @csrf
                                 <div class="form-group">
                                     <label>Email Address</label>
@@ -42,14 +39,6 @@
                                     <label>Phone Number</label>
                                     <input class="au-input au-input--full" type="text" name="phone" placeholder="Phone" required>
                                 </div>
-                                <div class="form-group">
-                                    <label>Role</label>
-                                    <select class="form-select" name="select_role">
-                                        @foreach ($user_roles as $user_role)
-                                            <option value="{{ $user_role }}">{{ $user_role }}</option>
-                                        @endforeach
-                                    </select>
-                                </div><br><br>
                                 <button class="au-btn au-btn--block au-btn--green m-b-20" type="submit">Register</button>
                                 {{session('error_mess_register')}}
                             </form>
@@ -59,10 +48,6 @@
             </div>
         </div>
     </div>
-
     @include('admin.partials.footer-scripts')
-
 </body>
-
 </html>
-<!-- end document-->
