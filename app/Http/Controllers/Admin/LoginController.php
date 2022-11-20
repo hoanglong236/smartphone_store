@@ -1,9 +1,7 @@
 <?php
 namespace App\Http\Controllers\Admin;
 
-require_once('../constant/Constant.php');
-
-use Admin_Account_Business;
+use App\Business\LoginBusiness;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -17,7 +15,7 @@ class LoginController extends Controller {
         $email = $request->post('email');
         $password = $request->post('password');
 
-        $business = new Admin_Account_Business();
+        $business = new LoginBusiness();
 
         $account = $business->get_account($email);
 

@@ -1,4 +1,5 @@
 <?php
+
 define("BASE_ADMIN_URL", "admin");
 define("BASE_ADMIN_ROUTE_NAME", "admin");
 
@@ -18,7 +19,7 @@ define("MANAGE_CATEGORY_URL", BASE_ADMIN_URL . "/category");
 
 // define($BASE_USER_URL, "user");
 
-
-
-
 define("DTO_PATH", "../app/Dto");
+
+define("ACCOUNT_TABLE", "`account`");
+define("ADMIN_TABLE", "`admin`");

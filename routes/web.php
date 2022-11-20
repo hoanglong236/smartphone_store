@@ -1,5 +1,4 @@
 <?php
-require_once('../constant/Constant.php');
 
 use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\RegisterController;
