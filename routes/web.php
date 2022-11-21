@@ -26,10 +26,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', function () {
-//     return view('welcome');
-// });
-
 Route::get(ADMIN_LOGIN_URL, [LoginController::class, 'index'])
     ->name(ADMIN_LOGIN_ROUTE);
 Route::post(ADMIN_LOGIN_AUTH_URL,[LoginController::class, 'login_handler'])
