@@ -6,27 +6,29 @@ use App\Dto\RegisterDto;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class RegisterController extends Controller {
-
-    public function index() {
-        return view('admin.register');
+class RegisterController extends Controller
+{
+    public function index()
+    {
+        return view('admin.auth_pages.register');
     }
 
-    public function register_handler(Request $request) {
+    // TODO: handle retype in javascript
+    public function register_handler(Request $request)
+    {
         $register_dto = new RegisterDto();
         $register_dto->email = $request->post('email');
         $register_dto->password = $request->post('password');
         $register_dto->full_name = $request->post('fullname');
         $register_dto->phone = $request->post('phone');
 
-        $retype_password = $request->post('retype_password');
+        $business = new RegisterBusiness();
 
-        if ($register_dto->password !== $retype_password){
-            $request->session()->flash('error_mess', 'Please retype correct password');
+        if ($business->checkEmailExist($register_dto->email)) {
+            $request->session()->flash('error_mess', 'Email is existed');
             return redirect()->route(ADMIN_REGISTER_URL);
         }
 
-        $business = new RegisterBusiness();
         $status = $business->register($register_dto);
 
         if ($status) {
