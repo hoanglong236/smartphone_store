@@ -2,50 +2,55 @@
 
 namespace App\Dao;
 
+use App\Dto\AccountDto;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
 class AccountDao
 {
-    public function getAccount($email)
-    {
-        $sql = 'SELECT * FROM ' . ACCOUNT_TABLE . ' WHERE email = ?';
-        $params = [$email];
+  public function getAccountDto($email)
+  {
+    $sql = 'SELECT * FROM ' . ACCOUNT_TABLE . ' WHERE email = ?';
+    $params = [$email];
 
-        $result = DB::select($sql, $params);
-
-        if (empty($result)) {
-            return false;
-        }
-
-        // email is unique
-        return $result[0];
+    $result = DB::select($sql, $params);
+    if (empty($result)) {
+      return false;
     }
 
-    public function register($account_obj)
-    {
-        $sql = 'INSERT INTO ' . ACCOUNT_TABLE . '(id, email, password) VALUES(?, ?, ?)';
-        $params = [$account_obj->id, $account_obj->email, Hash::make($account_obj->password)];
+    $account_dto = new AccountDto();
+    $account_dto->id = $result[0]->id;
+    $account_dto->email = $result[0]->email;
+    $account_dto->password = $result[0]->password;
 
-        $query_status = DB::insert($sql, $params);
-        return $query_status > 0 ? true : false;
-    }
+    return $account_dto;
+  }
 
-    public function checkIdExist($id)
-    {
-        $sql = 'SELECT * FROM ' . ACCOUNT_TABLE . ' WHERE id = ?';
-        $params = [$id];
+  public function register($account_dto)
+  {
+    $sql = 'INSERT INTO ' . ACCOUNT_TABLE . '(id, email, password) VALUES(?, ?, ?)';
+    $params = [$account_dto->id, $account_dto->email, Hash::make($account_dto->password)];
 
-        $result = DB::select($sql, $params);
-        return count($result) > 0;
-    }
+    $query_status = DB::insert($sql, $params);
+    return $query_status > 0;
+  }
 
-    public function checkEmailExist($email)
-    {
-        $sql = 'SELECT * FROM ' . ACCOUNT_TABLE . ' WHERE email = ?';
-        $params = [$email];
+  public function checkIdExist($id)
+  {
+    $sql = 'SELECT * FROM ' . ACCOUNT_TABLE . ' WHERE id = ?';
+    $params = [$id];
 
-        $result = DB::select($sql, $params);
-        return count($result) > 0;
-    }
+    $result = DB::select($sql, $params);
+    return count($result) > 0;
+  }
+
+  public function checkEmailExist($email)
+  {
+    $sql = 'SELECT * FROM ' . ACCOUNT_TABLE . ' WHERE email = ?';
+    $params = [$email];
+
+    $result = DB::select($sql, $params);
+    return count($result) > 0;
+  }
 }

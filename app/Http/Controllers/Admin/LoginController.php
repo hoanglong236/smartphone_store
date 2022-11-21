@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Business\LoginBusiness;
 use App\Http\Controllers\Controller;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
@@ -27,9 +29,8 @@ class LoginController extends Controller
     }
 
     if (Hash::check($password, $account->password)) {
-      $request->session()->put('ADMIN_LOGIN', true);
-      $request->session()->put('ADMIN_ID', $account->id);
-      $request->session()->put('ADMIN_NAME', $account->fullname);
+      $admin_logged_in = $business->getAdminLoggedIn($account->id);
+      $request->session()->put('ADMIN_LOGGED_IN', $admin_logged_in);
       return redirect()->route('admin.dashboard');
     }
 
@@ -37,17 +38,9 @@ class LoginController extends Controller
     return redirect()->route(ADMIN_LOGIN_URL);
   }
 
-  public function dashboard(Request $request)
-  {
-    $admin_name = $request->session()->get('ADMIN_NAME');
-    return view('admin.dashboard', ['admin_name' => $admin_name]);
-  }
-
   public function logout(Request $request)
   {
-    $request->session()->forget('ADMIN_LOGIN');
-    $request->session()->forget('ADMIN_ID');
-    $request->session()->forget('ADMIN_NAME');
+    $request->session()->forget('ADMIN_LOGGED_IN');
     $request->session()->flash('success_mess', 'Logout successfully');
     return redirect()->route(ADMIN_LOGIN_URL);
   }

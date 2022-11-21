@@ -4,65 +4,66 @@ namespace App\Business;
 
 use App\Dao\AccountDao;
 use App\Dao\AdminDao;
-use stdClass;
+use App\Dto\AccountDto;
+use App\Dto\AdminDto;
 
 class RegisterBusiness
 {
-    private $account_dao;
-    private $admin_dao;
+  private $account_dao;
+  private $admin_dao;
 
-    public function __construct()
-    {
-        $this->account_dao = new AccountDao();
-        $this->admin_dao = new AdminDao();
+  public function __construct()
+  {
+    $this->account_dao = new AccountDao();
+    $this->admin_dao = new AdminDao();
+  }
+
+  public function register($register_obj)
+  {
+    $account_dto = new AccountDto();
+    $account_dto->id = $this->generateAccountId();
+    $account_dto->email = $register_obj->email;
+    $account_dto->password = $register_obj->password;
+
+    $query_status = $this->account_dao->register($account_dto);
+
+    if (!$query_status) {
+      return $query_status;
     }
 
-    public function register($register_dto)
-    {
-        $account_obj = new stdClass();
-        $account_obj->id = $this->generateAccountId();
-        $account_obj->email = $register_dto->email;
-        $account_obj->password = $register_dto->password;
+    $admin_dto = new AdminDto();
+    $admin_dto->id = $this->generateAdminId();
+    $admin_dto->full_name = $register_obj->full_name;
+    $admin_dto->phone = $register_obj->phone;
+    $admin_dto->account_id = $account_dto->id;
 
-        $query_status = $this->account_dao->register($account_obj);
+    $query_status = $this->admin_dao->register($admin_dto);
 
-        if (!$query_status) {
-            return $query_status;
-        }
+    return $query_status;
+  }
 
-        $admin_obj = new stdClass();
-        $admin_obj->id = $this->generateAdminId();
-        $admin_obj->full_name = $register_dto->full_name;
-        $admin_obj->phone = $register_dto->phone;
-        $admin_obj->account_id = $account_obj->id;
+  public function checkEmailExist($email)
+  {
+    return $this->account_dao->checkEmailExist($email);
+  }
 
-        $query_status = $this->admin_dao->register($admin_obj);
+  private function generateAccountId()
+  {
+    $id = '';
+    do {
+      $id = substr(uniqid(mt_rand(), true), 0, 10);
+    } while ($this->account_dao->checkIdExist($id));
 
-        return $query_status;
-    }
+    return $id;
+  }
 
-    public function checkEmailExist($email)
-    {
-        return $this->account_dao->checkEmailExist($email);
-    }
+  private function generateAdminId()
+  {
+    $id = '';
+    do {
+      $id = substr(uniqid(mt_rand(), true), 0, 10);
+    } while ($this->admin_dao->checkIdExist($id));
 
-    private function generateAccountId()
-    {
-        $id = '';
-        do {
-            $id = substr(uniqid(mt_rand(), true), 0, 10);
-        } while ($this->account_dao->checkIdExist($id));
-
-        return $id;
-    }
-
-    private function generateAdminId()
-    {
-        $id = '';
-        do {
-            $id = substr(uniqid(mt_rand(), true), 0, 10);
-        } while ($this->admin_dao->checkIdExist($id));
-
-        return $id;
-    }
+    return $id;
+  }
 }
