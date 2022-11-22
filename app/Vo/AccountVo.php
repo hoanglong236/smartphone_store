@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Dto;
+namespace App\Vo;
 
-class AccountDto
+class AccountVo
 {
   public $id;
   public $email;

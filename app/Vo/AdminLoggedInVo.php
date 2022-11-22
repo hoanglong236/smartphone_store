@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Dto;
+namespace App\Vo;
 
-class AdminLoggedInDto
+class AdminLoggedInVo
 {
   public $id;
   public $full_name;

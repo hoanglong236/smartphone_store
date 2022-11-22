@@ -26,4 +26,5 @@ create table `admin` (
 
 select * from `account`;
 select * from `admin`;
-delete from `account` where id = '1916119505'
+delete from `admin` where id = '8970561736';
+delete from `account` where id = '1381626637';

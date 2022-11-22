@@ -21,7 +21,7 @@ class LoginController extends Controller
     $password = $request->post('password');
 
     $business = new LoginBusiness();
-    $account = $business->getAccount($email);
+    $account = $business->getAccountByEmail($email);
 
     if ($account === false) {
       $request->session()->flash('error_mess', 'Please enter valid login details');

@@ -2,26 +2,23 @@
 
 namespace App\Business;
 
-use App\Dao\AccountDao;
-use App\Dao\AdminDao;
+use App\Dao\LoginDao;
 
 class LoginBusiness
 {
-  private $account_dao;
-  private $admin_dao;
+  private $login_dao;
 
   public function __construct()
   {
-    $this->account_dao = new AccountDao();
-    $this->admin_dao = new AdminDao();
+    $this->login_dao = new LoginDao();
   }
 
-  public function getAccount($email)
+  public function getAccountByEmail($email)
   {
-    return $this->account_dao->getAccountDto($email);
+    return $this->login_dao->getAccountByEmail($email);
   }
 
   public function getAdminLoggedIn($account_id) {
-    return $this->admin_dao->getAdminLoggedDtoByAccountId($account_id);
+    return $this->login_dao->getAdminLoggedInByAccountId($account_id);
   }
 }
